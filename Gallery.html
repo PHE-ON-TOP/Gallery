@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note App - ChatGPT Style</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle, #179fc9 -125%, #000000 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            user-select: none;
+            transition: background 5s ease-in-out;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+            height: 80vh;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar {
+            width: 30%;
+            border-radius: 5px;
+            background-color: #ddd;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .sidebar h2 {
+            text-align: center;
+        }
+        .search-box {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        #note-list {
+            list-style: none;
+            padding: 0;
+        }
+        #note-list li {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #179fc9, #ddd);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #note-list li:hover {
+            background: linear-gradient(to right, #0e87b1, #bbb);
+        }
+        #note-list li.selected {
+            background: linear-gradient(to right, #000000, #0e88b1);
+            color: #fff;
+        }
+        #new-note-btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #179fc9;
+            color: #ddd;
+            border: none;
+            cursor: pointer;
+        }
+        .main-content {
+            width: 70%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .note-editor {
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        .note-editor input {
+            width: 100%;
+            border-radius: 5px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        .note-editor textarea {
+            width: 100%;
+            height: 600px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            resize: none;
+            box-sizing: border-box;
+        }
+        button {
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        #save-note-btn {
+            background-color: #008CBA;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        #delete-note-btn {
+            background-color: #FF6347;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        #copy-note-btn {
+            background-color: #555;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>My Notes</h2>
+            <input type="text" id="search-input" class="search-box" placeholder="Search notes..." />
+            <ul id="note-list"></ul>
+            <button id="new-note-btn">New Note</button>
+        </aside>
+        
+        <main class="main-content">
+            <div class="note-editor">
+                <input type="text" id="note-title" placeholder="Enter note name" />
+                <textarea id="note-content" placeholder="Write your note here"></textarea>
+                <button id="save-note-btn">Save Note</button>
+                <button id="copy-note-btn">Copy Text</button>
+                <button id="delete-note-btn">Delete Note</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const noteList = document.getElementById("note-list");
+            const newNoteBtn = document.getElementById("new-note-btn");
+            const saveNoteBtn = document.getElementById("save-note-btn");
+            const deleteNoteBtn = document.getElementById("delete-note-btn");
+            const copyNoteBtn = document.getElementById("copy-note-btn");
+            const noteTitleInput = document.getElementById("note-title");
+            const noteContentInput = document.getElementById("note-content");
+            const searchInput = document.getElementById("search-input");
+
+            let notes = JSON.parse(localStorage.getItem("notes")) || [];
+            let selectedNoteIndex = null;
+
+            function saveNotesToLocalStorage() {
+                localStorage.setItem("notes", JSON.stringify(notes));
+            }
+
+            function updateNoteList() {
+                noteList.innerHTML = "";
+                const searchQuery = searchInput.value.toLowerCase();
+                notes
+                    .filter(note => note.title.toLowerCase().includes(searchQuery))
+                    .forEach((note, index) => {
+                        const li = document.createElement("li");
+                        li.textContent = note.title;
+                        li.onclick = () => loadNoteContent(index);
+                        noteList.appendChild(li);
+                    });
+            }
+
+            function loadNoteContent(index) {
+                const note = notes[index];
+                selectedNoteIndex = index;
+                noteTitleInput.value = note.title;
+                noteContentInput.value = note.content;
+                document.querySelectorAll("#note-list li").forEach(li => li.classList.remove("selected"));
+                noteList.children[index].classList.add("selected");
+            }
+
+            newNoteBtn.onclick = function() {
+                noteTitleInput.value = "";
+                noteContentInput.value = "";
+                selectedNoteIndex = null;
+                document.querySelectorAll("#note-list li").forEach(li => li.classList.remove("selected"));
+            };
+
+            saveNoteBtn.onclick = function() {
+                const title = noteTitleInput.value || "Untitled";
+                const content = noteContentInput.value;
+                if (selectedNoteIndex !== null) {
+                    notes[selectedNoteIndex] = { title, content };
+                } else {
+                    notes.push({ title, content });
+                }
+                saveNotesToLocalStorage();
+                updateNoteList();
+            };
+
+            deleteNoteBtn.onclick = function() {
+                if (selectedNoteIndex !== null) {
+                    notes.splice(selectedNoteIndex, 1);
+                    saveNotesToLocalStorage();
+                    updateNoteList();
+                    noteTitleInput.value = "";
+                    noteContentInput.value = "";
+                    selectedNoteIndex = null;
+                } else {
+                    alert("Please select a note to delete.");
+                }
+            };
+
+            copyNoteBtn.onclick = function() {
+                navigator.clipboard.writeText(noteContentInput.value).then(() => {
+                    alert("Copied to clipboard!");
+                });
+            };
+
+            searchInput.addEventListener("input", updateNoteList);
+
+            updateNoteList();
+        });
+    </script>
+</body>
+</html>
