@@ -120,27 +120,23 @@
             border: none;
             cursor: pointer;
         }
-/* Media Query for mobile */
-@media (max-width: 600px) {
+        @media (max-width: 600px) {
     .container {
-        flex-direction: column;
+        flex-direction: column-reverse; /* สลับตำแหน่งองค์ประกอบ */
         height: 100vh;
-    }
-    .main-content {
-        width: 100%;
-        padding: 10px;
-        order: 2; /* Main content will be at the top on mobile */
     }
     .sidebar {
         width: 100%;
         padding: 10px;
-        order: 1; /* Sidebar will be below the main content on mobile */
+    }
+    .main-content {
+        width: 100%;
+        padding: 10px;
     }
     .note-editor textarea {
         height: 40vh;
     }
 }
-
     </style>
 </head>
 <body>
