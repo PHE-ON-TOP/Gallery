@@ -120,24 +120,25 @@
             border: none;
             cursor: pointer;
         }
-@media (max-width: 600px) {
-    .container {
-        display: flex;
-        flex-direction: column-reverse;
-        align-items: center;
-        height: 100vh;
-        padding: 10px;
-    }
-    .sidebar,
-    .main-content {
-        width: 100%;
-        max-width: 500px;
-        padding: 10px;
-    }
-    .note-editor textarea {
-        height: 40vh;
-    }
-}
+        @media (max-width: 600px) {
+            .container {
+                display: flex;
+                flex-direction: column-reverse;
+                align-items: center;
+                justify-content: flex-start;
+                height: 100vh;
+                padding-top: 20px;
+            }
+            .sidebar,
+            .main-content {
+                width: 100%;
+                max-width: 500px;
+                padding: 10px;
+            }
+            .note-editor textarea {
+                height: 40vh;
+            }
+        }
     </style>
 </head>
 <body>
