@@ -122,15 +122,18 @@
         }
         @media (max-width: 600px) {
             .container {
+                flex-direction: column;
                 height: 100vh;
             }
             .sidebar {
                 width: 100%;
                 padding: 10px;
+                order: 1;
             }
             .main-content {
                 width: 100%;
                 padding: 10px;
+                order: 2;
             }
             .note-editor textarea {
                 height: 40vh;
