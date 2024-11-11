@@ -120,17 +120,18 @@
             border: none;
             cursor: pointer;
         }
-        @media (max-width: 600px) {
+@media (max-width: 600px) {
     .container {
-        flex-direction: column-reverse; /* สลับตำแหน่งองค์ประกอบ */
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
         height: 100vh;
-    }
-    .sidebar {
-        width: 100%;
         padding: 10px;
     }
+    .sidebar,
     .main-content {
         width: 100%;
+        max-width: 500px;
         padding: 10px;
     }
     .note-editor textarea {
