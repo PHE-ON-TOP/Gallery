@@ -120,25 +120,27 @@
             border: none;
             cursor: pointer;
         }
-        @media (max-width: 600px) {
-            .container {
-                flex-direction: column;
-                height: 100vh;
-            }
-            .sidebar {
-                width: 100%;
-                padding: 10px;
-                order: 1;
-            }
-            .main-content {
-                width: 100%;
-                padding: 10px;
-                order: 2;
-            }
-            .note-editor textarea {
-                height: 40vh;
-            }
-        }
+/* Media Query for mobile */
+@media (max-width: 600px) {
+    .container {
+        flex-direction: column;
+        height: 100vh;
+    }
+    .main-content {
+        width: 100%;
+        padding: 10px;
+        order: 2; /* Main content will be at the top on mobile */
+    }
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+        order: 1; /* Sidebar will be below the main content on mobile */
+    }
+    .note-editor textarea {
+        height: 40vh;
+    }
+}
+
     </style>
 </head>
 <body>
